@@ -10,9 +10,9 @@ Before creating a new issue check and make sure somebody hasn't already beat you
 
 Here are a few things to keep in mind when creating an issue for a potential defect:
 
-* What version of Spectacle did you use when encountering the defect?
-* What version of OS X did you use when encountering the defect?
-* Was there any relevant Spectacle output in the [Console][3]?
+* What version of Spectacle did you use when encountering the defect? (See *About Spectacle* in its tray menu.)
+* What version of Windows did you use when encountering the defect? (Run `winver`.)
+* Was there any relevant Spectacle output in [DebugView][3]? Spectacle writes its diagnostics with `OutputDebugString`.
 
 Including screenshots or videos are extremely helpful so please include them if you can. Diagrams can also be highly valuable when describing a new feature in a feature request.
 
@@ -20,12 +20,12 @@ Including screenshots or videos are extremely helpful so please include them if 
 
 1. Fork the repository and create your branch from `master`
 2. Add tests if your changes can and should be tested
-3. Run the test suite and confirm that all tests pass
+3. Run `scripts\build.ps1`, which checks formatting, lints, runs the test suite and builds the installer, and confirm that it succeeds
 4. Rebase your changes on top of the most recent changes from `master`
 
 ## Coding Style
 
-To help make it easier maintain Spectacle please match the existing coding style as much as possible. This make it easier to both understand and merge your contributions. Only use two __spaces__ for indentation.
+To help make it easier maintain Spectacle please match the existing coding style as much as possible. This make it easier to both understand and merge your contributions. Format code with `cargo fmt`, keep `cargo clippy --all-targets -- -D warnings` clean, and explain every `unsafe` block with a `// SAFETY:` comment.
 
 ## License
 
@@ -33,4 +33,4 @@ By contributing to Spectacle you agree that your contributions will be licensed 
 
 [1]: https://guides.github.com/activities/contributing-to-open-source/#contributing
 [2]: https://github.com/eczarny/spectacle#common-issues
-[3]: https://en.wikipedia.org/wiki/Console_(OS_X)
+[3]: https://learn.microsoft.com/sysinternals/downloads/debugview

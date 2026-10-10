@@ -1,0 +1,14 @@
+[build]
+target = "x86_64-pc-windows-msvc"
+
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+  # Link the C runtime statically so the app needs no Visual C++ redistributable.
+  "-C", "target-feature=+crt-static",
+  # Exploit mitigations: Control Flow Guard and CET shadow stack compatibility.
+  "-C", "control-flow-guard",
+  "-C", "link-arg=/CETCOMPAT",
+  # Resolve the DLLs the executable imports from System32 only, never from the
+  # application or current directory.
+  "-C", "link-arg=/DEPENDENTLOADFLAG:0x800",
+]

@@ -1,27 +1,12 @@
-# Xcode
-#
-build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata
-*.xccheckout
-*.moved-aside
-DerivedData
-*.hmap
-*.ipa
-*.xcuserstate
+# Rust
+target/
 
-Carthage/Build
-Carthage/Checkouts
+# Installer output
+dist/
 
-# macOS
-.DS_Store
+# Settings files set aside or left behind while testing
+*.json.invalid
+*.json.*.tmp
 
 # Claude Code
 .claude/
