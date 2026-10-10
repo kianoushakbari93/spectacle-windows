@@ -173,9 +173,10 @@ Spanish, Finnish, French, Italian and Portuguese.
 * Settings are plain JSON files in `%APPDATA%\Spectacle` (`Shortcuts.json`,
   in the same format as the macOS version, and `Settings.json`). Files that
   cannot be read are set aside as `*.json.invalid` rather than overwritten.
-* The installer and executable are not code signed. Builds you make yourself
-  are not affected by this, but if you distribute them, Windows SmartScreen
-  will warn about unsigned downloads.
+* The executable, setup program and uninstaller are code signed when they are
+  built on a computer with a code signing certificate (see *Code signing*
+  below), so that Windows shows the publisher rather than "Unknown
+  publisher".
 
 ## Accessibility
 
@@ -210,6 +211,24 @@ installer) with:
 The installer is written to `dist\Spectacle-3.0-Setup.exe`. For development,
 `cargo run` starts a debug build and `cargo test` runs the test suite, which
 includes every window position calculation test of the macOS version.
+
+### Code signing
+
+When the build finds a code signing certificate issued to "Kianoush Akbari"
+in the current user's certificate store, it signs `Spectacle.exe`, the setup
+program and the uninstaller with it, and timestamps the signatures so they
+stay valid after the certificate expires. Use `-CertificateThumbprint` (or the
+`SPECTACLE_SIGNING_CERTIFICATE` environment variable) to pick another
+certificate, or `-Unsigned` to skip signing. Without a certificate the build
+is unsigned and Windows shows "Unknown publisher".
+
+A certificate from a public certificate authority is trusted by every
+Windows PC. A self-signed certificate is trusted only by the PCs it is added
+to, which suits builds for your own computer. To create one and trust it on
+this PC (the second command needs an administrator PowerShell):
+
+    New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=Kianoush Akbari" -KeyAlgorithm RSA -KeyLength 3072 -KeyExportPolicy NonExportable -CertStoreLocation Cert:\CurrentUser\My -NotAfter (Get-Date).AddYears(5) | Export-Certificate -FilePath KianoushAkbari.cer
+    Import-Certificate -FilePath KianoushAkbari.cer -CertStoreLocation Cert:\LocalMachine\Root
 
 ### Project layout
 

@@ -50,6 +50,12 @@ Compression=lzma2/ultra64
 SolidCompression=yes
 OutputDir=..\dist
 OutputBaseFilename={#AppName}-{#AppVersion}-Setup
+; scripts\build.ps1 defines SignToolName when a code signing certificate is
+; available, so that the setup program and its uninstaller are signed.
+#ifdef SignToolName
+SignTool={#SignToolName}
+SignedUninstaller=yes
+#endif
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
