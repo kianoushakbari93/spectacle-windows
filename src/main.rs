@@ -50,7 +50,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 use windows::core::{PCWSTR, w};
 
 /// The version shown to people.
-pub const VERSION: &str = "3.0";
+pub const VERSION: &str = "3.0.1";
 
 /// Held while Spectacle runs, so a second launch can find the first. The
 /// installer checks the same name to close Spectacle before updating it.

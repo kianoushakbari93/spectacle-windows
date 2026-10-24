@@ -2,8 +2,8 @@
 
 #include <winres.h>
 
-#define SPECTACLE_VERSION_BINARY 3,0,0,0
-#define SPECTACLE_VERSION_STRING "3.0.0.0"
+#define SPECTACLE_VERSION_BINARY 3,0,1,0
+#define SPECTACLE_VERSION_STRING "3.0.1.0"
 
 1 ICON "spectacle.ico"
 

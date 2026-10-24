@@ -6,8 +6,8 @@
 ; or run scripts\build.ps1, which does both and runs the tests.
 
 #define AppName "Spectacle"
-#define AppVersion "3.0"
-#define AppFileVersion "3.0.0.0"
+#define AppVersion "3.0.1"
+#define AppFileVersion "3.0.1.0"
 #define AppExe "Spectacle.exe"
 #define AppPublisher "Kianoush Akbari"
 #define AppUrl "https://github.com/kianoushakbari93/spectacle"

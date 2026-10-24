@@ -6,7 +6,7 @@ use windows::Win32::Graphics::Gdi::{MONITOR_DEFAULTTOPRIMARY, MonitorFromPoint};
 use windows::Win32::UI::HiDpi::{GetDpiForMonitor, GetSystemMetricsForDpi, MDT_EFFECTIVE_DPI};
 use windows::Win32::UI::Shell::{
     NIF_ICON, NIF_MESSAGE, NIF_SHOWTIP, NIF_TIP, NIM_ADD, NIM_DELETE, NIM_MODIFY, NIM_SETVERSION,
-    NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
+    NOTIFY_ICON_MESSAGE, NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{DestroyIcon, HICON, SM_CXSMICON};
 
@@ -32,21 +32,19 @@ impl TrayIcon {
         }
     }
 
-    /// Adds the icon, or adds it again after Explorer restarts.
+    /// Adds the icon, or adds it again after Explorer restarts. When the
+    /// taskbar is not ready yet, as early in signing in, the icon is added when
+    /// Explorer broadcasts TaskbarCreated.
     pub fn show(&mut self) {
         self.render_icon();
-        let mut data = self.data();
-        data.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | NIF_SHOWTIP;
-        // SAFETY: `data` is a fully initialised NOTIFYICONDATAW.
-        unsafe {
-            if !Shell_NotifyIconW(NIM_ADD, &data).as_bool() {
-                // The icon may survive from before Explorer restarted.
-                let _ = Shell_NotifyIconW(NIM_MODIFY, &data);
-            }
+        // The icon may survive from before Explorer restarted.
+        self.added = self.notify(NIM_ADD) || self.notify(NIM_MODIFY);
+        if self.added {
+            let mut data = self.data();
             data.Anonymous.uVersion = NOTIFYICON_VERSION_4;
-            let _ = Shell_NotifyIconW(NIM_SETVERSION, &data);
+            // SAFETY: `data` is a fully initialised NOTIFYICONDATAW.
+            let _ = unsafe { Shell_NotifyIconW(NIM_SETVERSION, &data) };
         }
-        self.added = true;
     }
 
     pub fn hide(&mut self) {
@@ -65,10 +63,17 @@ impl TrayIcon {
             return;
         }
         self.render_icon();
+        self.notify(NIM_MODIFY);
+    }
+
+    /// Sends the icon's whole state. With NOTIFYICON_VERSION_4 every
+    /// NIM_MODIFY must include NIF_SHOWTIP, or the taskbar shows an empty
+    /// tooltip from then on.
+    fn notify(&self, message: NOTIFY_ICON_MESSAGE) -> bool {
         let mut data = self.data();
-        data.uFlags = NIF_ICON;
+        data.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | NIF_SHOWTIP;
         // SAFETY: `data` is a fully initialised NOTIFYICONDATAW.
-        let _ = unsafe { Shell_NotifyIconW(NIM_MODIFY, &data) };
+        unsafe { Shell_NotifyIconW(message, &data) }.as_bool()
     }
 
     fn data(&self) -> NOTIFYICONDATAW {

@@ -19,7 +19,7 @@ shortcuts.
 
 ## Installing
 
-Run `Spectacle-3.0-Setup.exe` and follow the steps. Spectacle installs to
+Run `Spectacle-3.0.1-Setup.exe` and follow the steps. Spectacle installs to
 `C:\Program Files\Spectacle`, adds itself to the Start menu and starts when
 setup finishes. The first time it starts it opens its Settings window, where
 **Launch Spectacle at sign-in** makes it start with Windows.
@@ -208,7 +208,7 @@ installer) with:
 
     pwsh scripts\build.ps1
 
-The installer is written to `dist\Spectacle-3.0-Setup.exe`. For development,
+The installer is written to `dist\Spectacle-3.0.1-Setup.exe`. For development,
 `cargo run` starts a debug build and `cargo test` runs the test suite, which
 includes every window position calculation test of the macOS version.
 
